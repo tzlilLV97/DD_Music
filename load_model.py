@@ -5,6 +5,12 @@ import utils
 from model.ema import ExponentialMovingAverage
 import graph_lib
 import noise_lib
+from transformers import AutoModel, AutoTokenizer
+
+def load_model_llada():
+    tokenizer = AutoTokenizer.from_pretrained('GSAI-ML/LLaDA-8B-Base', trust_remote_code=True)
+    model = AutoModel.from_pretrained('GSAI-ML/LLaDA-8B-Base', trust_remote_code=True, torch_dtype=torch.bfloat16)
+    return model, tokenizer
 
 from omegaconf import OmegaConf
 
@@ -13,6 +19,8 @@ def load_model_hf(dir, device):
     graph = graph_lib.get_graph(score_model.config, device)
     noise = noise_lib.get_noise(score_model.config).to(device)
     return score_model, graph, noise
+
+# Load LLaMa Model from local directory
 
 
 def load_model_local(root_dir, device):
